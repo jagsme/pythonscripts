@@ -16,7 +16,7 @@ class TestUser(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.driver = webdriver.Chrome("/Users/jagdishm/Downloads/chromedriver")
-        cls.driver.get('https://dev-portal.signtrace.com')
+        cls.driver.get('https://testsigntrace.com')
        # cls.driver.maximize_window()
 
     #Login for Signtrace Admin
@@ -39,11 +39,9 @@ class TestUser(unittest.TestCase):
         self.driver.find_element_by_xpath("//*[@id='subnav']/ul/li[2]/a").click()
 
         self.driver.find_element_by_id("name").send_keys(accountname)
-        time.sleep(3)
         self.driver.find_element_by_id("submit").click()
         self.driver.implicitly_wait(20)
         self.driver.find_element_by_xpath("//*[@id='subnav']/ul/li[1]/a").click()
-        time.sleep(2)
         elemaccount = self.driver.find_element_by_xpath("//*[@id='accountList']/tbody/tr[10]/td[1]/b").text
         self.assertEqual(accountname,elemaccount)
 
@@ -51,9 +49,7 @@ class TestUser(unittest.TestCase):
         self.driver.find_element_by_xpath("//*[@id='accountList']/tbody/tr[6]/td[2]/a[2]").click()
         self.driver.find_element_by_id("name").clear()
         self.driver.find_element_by_id("name").send_keys(accteditname)
-        time.sleep(3)
         self.driver.find_element_by_id("submit").click()
-        time.sleep(3)
         ele = self.driver.find_element_by_xpath("//*[@id='accountList']/tbody/tr[6]/td[1]/b").text
         self.assertEqual(accteditname,ele)
 
@@ -80,9 +76,9 @@ class TestUser(unittest.TestCase):
         self.driver.find_element_by_id("password").send_keys("test")
         self.driver.find_element_by_xpath("//*[@id='role']/option[2]").click()
         self.driver.implicitly_wait(100)
-        time.sleep(5)
+        
         self.driver.find_element_by_xpath("//*[@id='account_id']/option[7]").click()
-        time.sleep(5)
+        
         self.driver.find_element_by_id("submit").click()
         self.driver.find_element_by_xpath("//*[@id='subnav']/ul/li[1]/a").click()
         element = self.driver.find_element_by_xpath("//*[contains(text(), 'Test user 1' )]").text
@@ -100,9 +96,9 @@ class TestUser(unittest.TestCase):
         self.driver.find_element_by_id("username").send_keys("test12@test.test")
         self.driver.find_element_by_id("password").send_keys("test")
         self.driver.find_element_by_xpath("//*[@id='role']/option[3]").click()
-        time.sleep(2)
+        
         self.driver.find_element_by_xpath("//*[@id='account_id']/option[7]").click()
-        time.sleep(3)
+        
         self.driver.find_element_by_id("submit").click()
         self.driver.find_element_by_xpath("//*[@id='subnav']/ul/li[1]/a").click()
         element1 = self.driver.find_element_by_xpath("//*[contains(text(), 'Test user 2' )]").text
@@ -139,7 +135,7 @@ class TestUser(unittest.TestCase):
         self.driver.find_element_by_id("password").send_keys("test@user.com")
         self.driver.find_element_by_id("submit").click()
         ele=self.driver.find_element_by_tag_name("li")
-        time.sleep(3)
+        
         self.assertEquals("Invalid Credentials", ele.text)
 
     #Login
@@ -151,7 +147,7 @@ class TestUser(unittest.TestCase):
     #Logout
     def logout(self):
         self.driver.find_element_by_xpath("//*[@id='header_1']/ul/li[1]/a").click()
-        time.sleep(2)
+        
 
     @classmethod
     def tearDownClass(cls):
