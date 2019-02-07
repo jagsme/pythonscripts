@@ -109,8 +109,8 @@ class TestUser(unittest.TestCase):
     #Login for Account Admin
   #  @unittest.skip("Test Skipped")
     def test_6AccountAdmin(self):
-        self.driver.find_element_by_id("username").send_keys("test@account.com")
-        self.driver.find_element_by_id("password").send_keys("test@account.com")
+        self.driver.find_element_by_id("username").send_keys("****")
+        self.driver.find_element_by_id("password").send_keys("****")
         self.driver.find_element_by_id("submit").click()
         self.assertIn("SignTrace", self.driver.title)
         self.driver.implicitly_wait(10)
@@ -120,8 +120,8 @@ class TestUser(unittest.TestCase):
     #Login for Account User
    # @unittest.skip("Test Skipped")
     def test_7User(self):
-        self.driver.find_element_by_id("username").send_keys("test@user.com")
-        self.driver.find_element_by_id("password").send_keys("test@user.com")
+        self.driver.find_element_by_id("username").send_keys("***")
+        self.driver.find_element_by_id("password").send_keys("***")
         self.driver.find_element_by_id("submit").click()
         self.assertIn("SignTrace", self.driver.title)
         self.driver.implicitly_wait(10)
@@ -132,7 +132,7 @@ class TestUser(unittest.TestCase):
     #@unittest.skip("Test Skipped")
     def test_8invalidLogin(self):
         self.driver.find_element_by_id("username").send_keys("!@#@!#")
-        self.driver.find_element_by_id("password").send_keys("test@user.com")
+        self.driver.find_element_by_id("password").send_keys("*****")
         self.driver.find_element_by_id("submit").click()
         ele=self.driver.find_element_by_tag_name("li")
         
@@ -140,8 +140,8 @@ class TestUser(unittest.TestCase):
 
     #Login
     def login(self):
-        self.driver.find_element_by_id("username").send_keys("stadmin@signtrace.com")
-        self.driver.find_element_by_id("password").send_keys("admin")
+        self.driver.find_element_by_id("username").send_keys("****")
+        self.driver.find_element_by_id("password").send_keys("***")
         self.driver.find_element_by_id("submit").click()
 
     #Logout
