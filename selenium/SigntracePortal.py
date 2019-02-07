@@ -8,15 +8,15 @@ import HTMLTestRunner
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
-accountname = "TestAccount12"
-accteditname = "Test12345"
-accountadmin = "Test@abc.comm"
+accountname = "****"
+accteditname = "***5"
+accountadmin = "***"
 
 class TestUser(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.driver = webdriver.Chrome("/Users/jagdishm/Downloads/chromedriver")
-        cls.driver.get('https://testsigntrace.com')
+        cls.driver = webdriver.Chrome("****")
+        cls.driver.get('*****')
        # cls.driver.maximize_window()
 
     #Login for Signtrace Admin
@@ -72,8 +72,8 @@ class TestUser(unittest.TestCase):
         self.driver.find_element_by_id("nav_user").click()
         self.driver.find_element_by_xpath("//*[@id='subnav']/ul/li[2]/a").click()
         self.driver.find_element_by_id("name").send_keys("Test user 1")
-        self.driver.find_element_by_id("username").send_keys(accountadmin)
-        self.driver.find_element_by_id("password").send_keys("test")
+        self.driver.find_element_by_id("username").send_keys(**)
+        self.driver.find_element_by_id("password").send_keys("**")
         self.driver.find_element_by_xpath("//*[@id='role']/option[2]").click()
         self.driver.implicitly_wait(100)
         
@@ -93,8 +93,8 @@ class TestUser(unittest.TestCase):
         self.driver.find_element_by_id("nav_user").click()
         self.driver.find_element_by_xpath("//*[@id='subnav']/ul/li[2]/a").click()
         self.driver.find_element_by_id("name").send_keys("Test user 2")
-        self.driver.find_element_by_id("username").send_keys("test12@test.test")
-        self.driver.find_element_by_id("password").send_keys("test")
+        self.driver.find_element_by_id("username").send_keys("***")
+        self.driver.find_element_by_id("password").send_keys("***")
         self.driver.find_element_by_xpath("//*[@id='role']/option[3]").click()
         
         self.driver.find_element_by_xpath("//*[@id='account_id']/option[7]").click()
