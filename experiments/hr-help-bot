@@ -1,0 +1,121 @@
+import os
+import time
+import re
+from slackclient import SlackClient
+import gspread
+from oauth2client.service_account import ServiceAccountCredentials
+
+SLACK_BOT_TOKEN = 'enter your slack token'
+slack_client = SlackClient(SLACK_BOT_TOKEN)
+starter_bot_id = None
+
+
+# constants
+RTM_READ_DELAY = 1 # 1 second delay between reading from RTM
+EXAMPLE_COMMAND = "twr"
+EXAMPLE_COMMAND2 = "twor"
+ASK_HELP = "help"
+CANCEL_LUNCH = "no lunch"
+LIST_ALL = "list"
+MENTION_REGEX = "^<@(|[WU].+?)>(.*)"
+scope = ['https://spreadsheets.google.com/feeds','https://www.googleapis.com/auth/spreadsheets','https://www.googleapis.com/auth/drive']
+creds = ServiceAccountCredentials.from_json_keyfile_name('enter your google sheets key', scope)
+client = gspread.authorize(creds)
+sheet = client.open("Lunch-Status").sheet1
+
+list_users = slack_client.api_call("users.list")
+user_name = list_users.get('members')
+
+def parse_bot_commands(slack_events):
+    """
+        Parses a list of events coming from the Slack RTM API to find bot commands.
+        If a bot command is found, this function returns a tuple of command and channel.
+        If its not found, then this function returns None, None.
+    """
+    for event in slack_events:
+        if event["type"] == "message" and not "subtype" in event:
+            if __name__ == '__main__':
+                if list_users.get('ok'):
+                    for uname in user_name:
+                        if event['user']==uname['id']:
+                            if uname.get('name') in values_list:
+                                # Need to remove this in future
+                                print (type(sheet.find(uname.get('name'))))
+                                find_cell=sheet.find(uname.get('name'))
+                                # testing purpose, will be removed soon
+                                print (find_cell.row)
+                                print (find_cell.col)
+                                #sheet.update_cell(find_cell.row,find_cell.col+2,"Yes")
+
+            user_id, message = parse_direct_mention(event["text"])
+            if user_id == starterbot_id:
+                return message, event["channel"], find_cell.row, find_cell.col
+    return None, None, None, None
+
+def parse_direct_mention(message_text):
+    """
+        Finds a direct mention (a mention that is at the beginning) in message text
+        and returns the user ID which was mentioned. If there is no direct mention, returns None
+    """
+    matches = re.search(MENTION_REGEX, message_text)
+    # the first group contains the username, the second group contains the remaining message
+    return (matches.group(1), matches.group(2).strip()) if matches else (None, None)
+
+def handle_command(command, channel, update_row, update_col):
+    """
+        Executes bot command if the command is known
+    """
+    # Default response is help text for the user
+    default_response = "Not sure what you mean. Try @HR-Bot {}.".format(ASK_HELP)
+
+    # Finds and executes the given command, filling in response
+    response = None
+    # This is where you start to implement more commands!
+    if command.startswith(EXAMPLE_COMMAND):
+        # withrice = withrice+1
+        # sheet.update_acell('E3',withrice)
+        sheet.update_cell(update_row, update_col + 1, "Yes")
+        sheet.update_cell(update_row, update_col + 2, "No")
+        response = "Noted"
+    if command.startswith(EXAMPLE_COMMAND2):
+        # withoutrice=withoutrice+1
+        # sheet.update_acell('F3',withoutrice)
+        sheet.update_cell(update_row, update_col + 1, "No")
+        sheet.update_cell(update_row, update_col + 2, "Yes")
+        response = "Noted"
+    if command.startswith(ASK_HELP):
+        response = "------------------------\n 1) If you want to add Tiffin With Rice - say @HR-bot twr\n 2) If you want to add Tiffin without Rice - say @HR-bot twor\n 3) These entries will remain intact untill and unless you say @HR-bot no lunch\n 4) You can change the choice anytime of the day\n 5) To list total count say @HR-bot list\n------------------------"
+    # Sends the response back to the channel
+    if command.startswith(CANCEL_LUNCH):
+        sheet.update_cell(update_row,update_col+1, "No")
+        sheet.update_cell(update_row,update_col+2,"No")
+        response = "Your lunch is cancelled"
+    if command.startswith(LIST_ALL):
+        withrice = int(sheet.acell('E3').value)
+        withoutrice = int(sheet.acell('F3').value)
+        response = "Total count for lunch without rice = " + str(withoutrice) +" and with rice = " + str(withrice)
+    slack_client.api_call(
+        "chat.postMessage",
+        channel=channel,
+        text=response or default_response
+    )
+
+
+if __name__ == "__main__":
+    if slack_client.rtm_connect(with_team_state=False):
+        print("Starter Bot connected and running!")
+        # Read bot's user ID by calling Web API method `auth.test`
+        starterbot_id = slack_client.api_call("auth.test")["user_id"]
+        print("starter BOT id = " + str(starterbot_id))
+        for u in user_name:
+            print (u.get('name'))
+        values_list = sheet.col_values(1)
+       # print (type(values_list))
+        while True:
+            command, channel,row,col = parse_bot_commands(slack_client.rtm_read())
+            if command:
+                handle_command(command, channel,row,col)
+            time.sleep(RTM_READ_DELAY)
+    else:
+        print("Connection failed. Exception traceback printed above.")
+
