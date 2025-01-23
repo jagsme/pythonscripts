@@ -1,7 +1,7 @@
 {
   "swagger": "2.0",
   "info": {
-    "description": "This is a sample server Petstore server by JAGS.  You can find out more about Swagger at [http://evil](http://evil.com) or on [irc.freenode.net, #swagger](http://evil).  For this sample, you can use the api key `special-key` to test the authorization filters.",
+    "description": "This is a sample server Petstore server by JAGS.  You can find out more about Swagger at [http://evil](javascript:alert(1)) or on [irc.freenode.net, #swagger](http://evil).  For this sample, you can use the api key `special-key` to test the authorization filters.",
     "version": "1.0.7",
     "title": "Swagger Petstore",
     "termsOfService": "javascript:alert(document.cookie)",
